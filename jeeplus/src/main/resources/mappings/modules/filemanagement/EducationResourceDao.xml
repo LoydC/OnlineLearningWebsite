@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.filemanagement.dao.EducationResourceDao">
+    
+    <sql id="educationResourceColumns">
+        a.id AS "id",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.del_flag AS "delFlag",
+        a.course AS "course",
+        a.resource_name AS "resourceName",
+        a.display_path AS "displayPath",
+        a.server_path AS "serverPath",
+        a.type AS "type",
+        a.course_number AS "courseNumber",
+        a.chapter AS "chapter",
+        a.section AS "section",
+        a.knowledge_point AS "konwledgePoint",
+        a.introduction AS "introduction",
+        a.key_words AS "keyWords",
+        a.author AS "author",
+        a.author_unit AS "authorUnit"
+    </sql>
+    
+    <sql id="educationResourceJoins">
+    </sql>
+    
+    
+    <select id="get" resultType="EducationResource" >
+        SELECT 
+            <include refid="educationResourceColumns"/>
+        FROM education_resource a
+        <include refid="educationResourceJoins"/>
+        WHERE a.id = #{id}
+    </select>
+    
+    <select id="findList" resultType="EducationResource" >
+        SELECT 
+            <include refid="educationResourceColumns"/>
+        FROM education_resource a
+        <include refid="educationResourceJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="course != null and course != ''">
+                AND a.course = #{course}
+            </if>
+            <if test="resourceName != null and resourceName != ''">
+                AND a.resource_name LIKE 
+                    <if test="dbName == 'oracle'">'%'||#{resourceName}||'%'</if>
+                    <if test="dbName == 'mssql'">'%'+#{resourceName}+'%'</if>
+                    <if test="dbName == 'mysql'">concat('%',#{resourceName},'%')</if>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="findAllList" resultType="EducationResource" >
+        SELECT 
+            <include refid="educationResourceColumns"/>
+        FROM education_resource a
+        <include refid="educationResourceJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>        
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <insert id="insert">
+        INSERT INTO education_resource(
+            id,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            del_flag,
+            course,
+            resource_name,
+            display_path,
+            server_path,
+            type,
+            course_number,
+            chapter,
+            section,
+            knowledge_point,
+            introduction,
+            key_words,
+            author,
+            author_unit
+        ) VALUES (
+            #{id},
+            #{createBy.id},
+            #{createDate},
+            #{updateBy.id},
+            #{updateDate},
+            #{delFlag},
+            #{course},
+            #{resourceName},
+            #{displayPath},
+            #{serverPath},
+            #{type},
+            #{courseNumber},
+            #{chapter},
+            #{section},
+            #{konwledgePoint},
+            #{introduction},
+            #{keyWords},
+            #{author},
+            #{authorUnit}
+        )
+    </insert>
+    
+    <update id="update">
+        UPDATE education_resource SET   
+            update_by = #{updateBy.id},
+            update_date = #{updateDate},
+            course = #{course},
+            resource_name = #{resourceName},
+            display_path = #{displayPath},
+            server_path = #{serverPath},
+            type = #{type},
+            course_number = #{courseNumber},
+            chapter = #{chapter},
+            section = #{section},
+            knowledge_point = #{konwledgePoint},
+            introduction = #{introduction},
+            key_words = #{keyWords},
+            author = #{author},
+            author_unit = #{authorUnit}
+        WHERE id = #{id}
+    </update>
+    
+    
+    <!--物理删除-->
+    <update id="delete">
+        DELETE FROM education_resource
+        WHERE id = #{id}
+    </update>
+    
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE education_resource SET 
+            del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+    
+    
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="EducationResource" statementType="STATEMENT">
+        select * FROM education_resource  where ${propertyName} = '${value}'
+    </select>
+    
+</mapper>
