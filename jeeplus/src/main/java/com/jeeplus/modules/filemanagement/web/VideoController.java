@@ -5,15 +5,14 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jeeplus.common.web.BaseController;
-import com.jeeplus.modules.sys.utils.UserUtils;
-
-import kafka.api.Request;
+import com.jeeplus.modules.filemanagement.entity.EducationResource;
+import com.jeeplus.modules.filemanagement.service.EducationResourceService;
 
 /**
  * 文件管理Controller
@@ -24,21 +23,29 @@ import kafka.api.Request;
 @Controller
 @RequestMapping(value = "${adminPath}/video")
 public class VideoController extends BaseController {
-
-	@RequestMapping(value = { "list", "" })
-	public String play(String videoPath, HttpServletRequest request, HttpServletResponse response,Model model) {
+	
+    @Autowired
+    private EducationResourceService educationResourceService;
+	
+    @RequestMapping(value = { "list", "" })
+	public String play(String videoId, HttpServletRequest request, HttpServletResponse response,Model model) {
 		
-		videoPath = "/jeeplus/file/" + videoPath;
+    	EducationResource er = educationResourceService.get(videoId);
 
-		try {
-			videoPath= java.net.URLDecoder.decode(videoPath , "UTF-8");	
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} 
-		
-		model.addAttribute("videoPath",videoPath);
-		return "modules/filemanagement/video";
+    	model.addAttribute("videoId",er.getId());
+    	model.addAttribute("videoPath","http://video-js.zencoder.com/oceans-clip.mp4");
+		//model.addAttribute("videoPath",er.getServerPath());
+
+    	return "modules/filemanagement/video";
 
 	}
 
+	/*
+	 * 点击教学资源展示的form
+	 */
+    @RequestMapping(value = "form")
+    public String form(String videoId, HttpServletRequest request, HttpServletResponse response,Model model) {
+        model.addAttribute("educationResource", educationResourceService.get(videoId));
+        return "modules/filemanagement/videoResourceForm";
+    }
 }

@@ -20,11 +20,12 @@
 	<script src="${ctxStatic }/videojs/js/videojs-ie8.min.js"></script>
 
 </head>
+
 <body class="gray-bg">
 
 		<div class="row">
-			<div class="col-lg-12">
-				<div class="ibox float-e-margins">
+			<div class="col-lg-8">
+				<div class="ibox ">
 					<div class="ibox-title">
 						<h5>文件树</h5>
 						<div class="ibox-tools">
@@ -154,18 +155,13 @@
 			$('#using_json').on("changed.jstree", function (e, data) {
         		var videoPath = data.instance.get_path(data.selected[0],"/",0);
 		        var fileExtension = videoPath.substring(videoPath.lastIndexOf('.') + 1);
-		        var videoId = data.node.id;
-		        
-		        var url = '${ctx}/video/form?videoId=' + videoId;
-		        
-		        parent.openVideoResourceDialog("查看",url,"800px", "500px");
-		        
-		         /* if(fileExtension == 'mp4'){
-		        	var url = '${ctx}/video?videoId=' + videoId;
+		        consoel.log(data);
+				if(fileExtension == 'mp4'){
+		        	var url = '${ctx}/video?videoPath=' + videoPath;
 			        url = encodeURI(encodeURI(url));		        
 			        //parent.parentMenuItem(url,"视频播放");
 			        parent.openTab(url,"视频播放",false);
-		        }  */
+		        } 
 
       		})  
 			//

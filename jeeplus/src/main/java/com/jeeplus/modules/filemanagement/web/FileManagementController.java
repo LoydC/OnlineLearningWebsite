@@ -153,7 +153,7 @@ public class FileManagementController extends BaseController {
 	}
 
 	/**
-	 * 文件管理列表页面
+	 * 学生展示列表页面
 	 * 
 	 * @return String
 	 */
@@ -212,7 +212,4 @@ public class FileManagementController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/filemanagement/fileManagement";		
 	}
 
-
-	
-	
 }

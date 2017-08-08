@@ -36,7 +36,8 @@
 			<script src="http://vjs.zencdn.net/5.18.4/video.min.js"></script>	
 		  	<script type="text/javascript">
 				var myPlayer = videojs('my-Video',{ fluid: true}, function () {
-					console.log('Good to go!');
+					console.log('Good to go!!');
+					console.log('${videoId}');
            			//this.play(); 
 				});
 				myPlayer.on("play", function(){
