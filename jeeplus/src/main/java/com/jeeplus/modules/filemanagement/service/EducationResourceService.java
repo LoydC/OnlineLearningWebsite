@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeeplus.common.persistence.Page;
 import com.jeeplus.common.service.CrudService;
+import com.jeeplus.modules.filemanagement.entity.CourseFile;
 import com.jeeplus.modules.filemanagement.entity.EducationResource;
 import com.jeeplus.modules.filemanagement.dao.EducationResourceDao;
 
@@ -40,8 +41,6 @@ public class EducationResourceService extends CrudService<EducationResourceDao, 
     public void delete(EducationResource educationResource) {
         super.delete(educationResource);
     }
-    
-    
-    
+
     
 }

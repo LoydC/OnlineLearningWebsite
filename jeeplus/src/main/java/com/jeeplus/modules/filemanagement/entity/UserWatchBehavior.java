@@ -12,6 +12,28 @@ public class UserWatchBehavior {
 	
 	Double totalTime;
 	
+	List<Double> timeupdate;
+
+	List<PlayBehavior> playList;
+	
+	List<PauseBehavior> pauseList;
+	
+	public UserWatchBehavior(String userId, String videoId, String courseId, Double totalTime) {
+		super();
+		this.userId = userId;
+		this.videoId = videoId;
+		this.courseId = courseId;
+		this.totalTime = totalTime;
+	}
+	
+	public List<Double> getTimeupdate() {
+		return timeupdate;
+	}
+
+	public void setTimeupdate(List<Double> timeupdate) {
+		this.timeupdate = timeupdate;
+	}
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -60,25 +82,6 @@ public class UserWatchBehavior {
 		this.pauseList = pauseList;
 	}
 
-	public VideotTimeupdate getVideoTimeupdate() {
-		return videoTimeupdate;
-	}
 
-	public void setVideoTimeupdate(VideotTimeupdate videoTimeupdate) {
-		this.videoTimeupdate = videoTimeupdate;
-	}
-
-	public UserWatchBehavior(String userId, String videoId, String courseId, Double totalTime) {
-		super();
-		this.userId = userId;
-		this.videoId = videoId;
-		this.courseId = courseId;
-		this.totalTime = totalTime;
-	}
-
-	List<PlayBehavior> playList;
 	
-	List<PauseBehavior> pauseList;
-	
-	VideotTimeupdate videoTimeupdate;
 }

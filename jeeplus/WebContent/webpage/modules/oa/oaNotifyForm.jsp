@@ -77,40 +77,40 @@
 		      	</tr>
 			</c:if>
 			
-					<c:if test="${oaNotify.status eq '1'}">
-					  <tr>
-				         <td  class="width-15 active">	<label class="pull-right">接受人：</label></td>
-				         <td class="width-35" colspan="3"><table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-								<thead>
-									<tr>
-										<th>接受人</th>
-										<th>接受部门</th>
-										<th>阅读状态</th>
-										<th>阅读时间</th>
-									</tr>
-								</thead>
-								<tbody>
-								<c:forEach items="${oaNotify.oaNotifyRecordList}" var="oaNotifyRecord">
-									<tr>
-										<td>
-											${oaNotifyRecord.user.name}
-										</td>
-										<td>
-											${oaNotifyRecord.user.office.name}
-										</td>
-										<td>
-											${fns:getDictLabel(oaNotifyRecord.readFlag, 'oa_notify_read', '')}
-										</td>
-										<td>
-											<fmt:formatDate value="${oaNotifyRecord.readDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-										</td>
-									</tr>
-								</c:forEach>
-								</tbody>
-							</table>
-							已查阅：${oaNotify.readNum} &nbsp; 未查阅：${oaNotify.unReadNum} &nbsp; 总共：${oaNotify.readNum + oaNotify.unReadNum}</td>
-				      </tr>
-		</c:if>
+			<c:if test="${oaNotify.status eq '1'}">
+			  <tr>
+		         <td  class="width-15 active">	<label class="pull-right">接受人：</label></td>
+		         <td class="width-35" colspan="3"><table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
+						<thead>
+							<tr>
+								<th>接受人</th>
+								<th>接受部门</th>
+								<th>阅读状态</th>
+								<th>阅读时间</th>
+							</tr>
+						</thead>
+						<tbody>
+						<c:forEach items="${oaNotify.oaNotifyRecordList}" var="oaNotifyRecord">
+							<tr>
+								<td>
+									${oaNotifyRecord.user.name}
+								</td>
+								<td>
+									${oaNotifyRecord.user.office.name}
+								</td>
+								<td>
+									${fns:getDictLabel(oaNotifyRecord.readFlag, 'oa_notify_read', '')}
+								</td>
+								<td>
+									<fmt:formatDate value="${oaNotifyRecord.readDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+								</td>
+							</tr>
+						</c:forEach>
+						</tbody>
+					</table>
+					已查阅：${oaNotify.readNum} &nbsp; 未查阅：${oaNotify.unReadNum} &nbsp; 总共：${oaNotify.readNum + oaNotify.unReadNum}</td>
+		      </tr>
+			</c:if>
 		</tbody>
 		</table>
 		     

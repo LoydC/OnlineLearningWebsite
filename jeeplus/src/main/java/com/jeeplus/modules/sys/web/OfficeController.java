@@ -173,6 +173,7 @@ public class OfficeController extends BaseController {
 				if (type != null && "3".equals(type)){
 					map.put("isParent", true);
 				}
+				System.out.println(e.getId() + " - " + e.getParentId() + " - " + e.getParentIds() + " - " + e.getName());
 				mapList.add(map);
 			}
 		}

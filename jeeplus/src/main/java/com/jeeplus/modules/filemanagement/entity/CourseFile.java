@@ -4,14 +4,42 @@ import java.util.List;
 
 public class CourseFile {
 	private String text;
-
-	private String url;
 	
 	private String icon;
 
 	private List<CourseFile> children;
 
 	private State state;
+
+	private String id;
+	
+	private String pid;
+	
+	private String pids;
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
+	public String getPids() {
+		return pids;
+	}
+
+	public void setPids(String pids) {
+		this.pids = pids;
+	}
 
 	public State getState() {
 		return state;
@@ -58,14 +86,6 @@ public class CourseFile {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 	
 	public String getIcon() {
 		return icon;
@@ -82,4 +102,5 @@ public class CourseFile {
 	public void setChildren(List<CourseFile> children) {
 		this.children = children;
 	}
+
 }

@@ -5,14 +5,16 @@
 	<sql id="preclassDutyColumns">
 		a.id AS "id",
 		a.preview_report_form AS "reportForm.id",
-		a.learning_resource AS "learningResource",
+		a.learning_resource AS "learningResource.id",
 		a.learning_target AS "learningTarget",
 		a.question_and_thinking AS "questionAndThinking",
-		a.doubt AS "doubt"
+		a.doubt AS "doubt",
+		learningResource.id AS "learningResource.id"
 	</sql>
 	
 	<sql id="preclassDutyJoins">
 		LEFT JOIN preview_report_form b ON b.id = a.preview_report_form
+		LEFT JOIN education_resource learningResource ON learningResource.id = a.learning_resource
 	</sql>
 	
     
@@ -72,7 +74,7 @@
 		) VALUES (
 			#{id},
 			#{reportForm.id},
-			#{learningResource},
+			#{learningResource.id},
 			#{learningTarget},
 			#{questionAndThinking},
 			#{doubt}
@@ -82,7 +84,7 @@
 	<update id="update">
 		UPDATE preview_preclass_duty SET 	
 			preview_report_form = #{reportForm.id},
-			learning_resource = #{learningResource},
+			learning_resource = #{learningResource.id},
 			learning_target = #{learningTarget},
 			question_and_thinking = #{questionAndThinking},
 			doubt = #{doubt}
@@ -123,4 +125,26 @@
 		select * FROM preview_preclass_duty  where ${propertyName} = '${value}'
 	</select>
 	
+	<select id="findListBylearningResource" resultType="EducationResource">
+		SELECT 
+			*
+		FROM education_resource a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id LIKE 
+				<if test="dbName == 'oracle'">#{id}||'%'</if>
+				<if test="dbName == 'mssql'">#{id}+'%'</if>
+				<if test="dbName == 'mysql'">concat(#{id},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

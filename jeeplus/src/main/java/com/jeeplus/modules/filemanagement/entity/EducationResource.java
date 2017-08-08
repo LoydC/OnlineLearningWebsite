@@ -13,7 +13,7 @@ public class EducationResource extends DataEntity<EducationResource> {
     
     private static final long serialVersionUID = 1L;
     private String course;      // 课程
-    private String resourceName;        // 资源名称
+    public String resourceName;        // 资源名称
     private String displayPath;     // 资源的展示路径
     private String serverPath;      // 服务器路径
     private String type;        // 资源类型

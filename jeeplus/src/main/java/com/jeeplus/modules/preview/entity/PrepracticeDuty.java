@@ -1,5 +1,7 @@
 package com.jeeplus.modules.preview.entity;
 
+import com.jeeplus.modules.filemanagement.entity.EducationResource;
+import javax.validation.constraints.NotNull;
 
 import com.jeeplus.common.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
@@ -7,13 +9,13 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 预习报告单Entity
  * @author loyd
- * @version 2017-08-02
+ * @version 2017-08-06
  */
 public class PrepracticeDuty extends DataEntity<PrepracticeDuty> {
 	
 	private static final long serialVersionUID = 1L;
 	private ReportForm reportForm;		// 预习报告单Id 父类
-	private String practiceDuty;		// 实习任务
+	private EducationResource practiceDuty;		// 实习任务
 	private String contentAndTarget;		// 内容与目标
 	private String doubt;		// 疑问
 	
@@ -37,12 +39,13 @@ public class PrepracticeDuty extends DataEntity<PrepracticeDuty> {
 		this.reportForm = reportForm;
 	}
 	
+	@NotNull(message="实习任务不能为空")
 	@ExcelField(title="实习任务", align=2, sort=2)
-	public String getPracticeDuty() {
+	public EducationResource getPracticeDuty() {
 		return practiceDuty;
 	}
 
-	public void setPracticeDuty(String practiceDuty) {
+	public void setPracticeDuty(EducationResource practiceDuty) {
 		this.practiceDuty = practiceDuty;
 	}
 	

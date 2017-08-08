@@ -44,7 +44,7 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-			<span>任务单编号：</span>
+			<span>任务单名称：</span>
 				<form:input path="reportFormNum" htmlEscape="false" maxlength="64"  class=" form-control input-sm"/>
 		 </div>	
 	</form:form>
@@ -86,7 +86,7 @@
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
-				<th  class="sort-column reportFormNum">任务单编号</th>
+				<th  class="sort-column reportFormNum">任务单名称</th>
 				<th  class="sort-column learningContent">学习内容</th>
 				<th>操作</th>
 			</tr>

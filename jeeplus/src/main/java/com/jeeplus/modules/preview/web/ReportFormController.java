@@ -1,6 +1,7 @@
 package com.jeeplus.modules.preview.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,30 +16,44 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
-import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.utils.MyBeanUtils;
+import com.google.common.collect.Maps;
 import com.jeeplus.common.config.Global;
 import com.jeeplus.common.persistence.Page;
-import com.jeeplus.common.web.BaseController;
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.MyBeanUtils;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
+import com.jeeplus.common.web.BaseController;
+import com.jeeplus.modules.filemanagement.entity.CourseFile;
+import com.jeeplus.modules.filemanagement.entity.EducationResource;
+import com.jeeplus.modules.filemanagement.service.EducationResourceService;
+import com.jeeplus.modules.filemanagement.service.FileManagementService;
 import com.jeeplus.modules.preview.entity.ReportForm;
 import com.jeeplus.modules.preview.service.ReportFormService;
+import com.jeeplus.modules.sys.entity.User;
+import com.jeeplus.modules.sys.utils.UserUtils;
 
 /**
  * 预习报告单Controller
  * @author loyd
- * @version 2017-08-02
+ * @version 2017-08-06
  */
 @Controller
 @RequestMapping(value = "${adminPath}/preview/reportForm")
 public class ReportFormController extends BaseController {
 
+	@Autowired
+	private FileManagementService fileManagementService;
+
+    @Autowired
+    private EducationResourceService educationResourceService;
+	
 	@Autowired
 	private ReportFormService reportFormService;
 	
@@ -60,6 +75,7 @@ public class ReportFormController extends BaseController {
 	@RequiresPermissions("preview:reportForm:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(ReportForm reportForm, HttpServletRequest request, HttpServletResponse response, Model model) {
+		reportForm.setCreateBy(UserUtils.getUser());
 		Page<ReportForm> page = reportFormService.findPage(new Page<ReportForm>(request, response), reportForm); 
 		model.addAttribute("page", page);
 		return "modules/preview/reportFormList";
@@ -186,8 +202,53 @@ public class ReportFormController extends BaseController {
 		}
 		return "redirect:"+Global.getAdminPath()+"/preview/reportForm/?repage";
     }
-	
-	
-	
 
+
+	/**
+	 * 获取机构JSON数据。
+	 * 
+	 * @param extId
+	 *            排除的ID
+	 * @param type
+	 *            类型（1：公司；2：部门/小组/其它：3：用户）
+	 * @param grade
+	 *            显示级别
+	 * @param response
+	 * @return
+	 */
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required = false) String extId,
+			@RequestParam(required = false) String type, @RequestParam(required = false) Long grade,
+			@RequestParam(required = false) Boolean isAll, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+
+		List<EducationResource> resourceList = educationResourceService.findList(new EducationResource());
+		CourseFile cf = fileManagementService.getCourseFileList(resourceList);
+
+		return traverseFolder(cf,mapList);
+	}
+
+	public List<Map<String, Object>> traverseFolder(CourseFile cf,List<Map<String, Object>> mapList) {
+
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("id", cf.getId());
+		map.put("pId", cf.getPid());
+		map.put("pIds", cf.getPids());
+		map.put("name", cf.getText());
+	
+		mapList.add(map);
+		
+		List<CourseFile> files = cf.getChildren();
+
+		if(files != null){
+			for (CourseFile file2 : files) {
+				traverseFolder(file2,mapList);
+			}
+		}
+		
+		return mapList;
+	
+	}
 }

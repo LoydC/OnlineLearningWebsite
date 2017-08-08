@@ -72,7 +72,7 @@
 		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
 		   <tbody>
 				<tr>
-					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>任务单编号：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>任务单名称：</label></td>
 					<td class="width-35">
 						<form:input path="reportFormNum" htmlEscape="false"    class="form-control required"/>
 					</td>
@@ -115,10 +115,11 @@
 						<input id="preclassDutyList{{idx}}_delFlag" name="preclassDutyList[{{idx}}].delFlag" type="hidden" value="0"/>
 					</td>
 					
-					<td>
-						<textarea id="preclassDutyList{{idx}}_learningResource" name="preclassDutyList[{{idx}}].learningResource" rows="4"    class="form-control required">{{row.learningResource}}</textarea>
-					</td>
-					
+					<td  class="max-width-250">
+            			<sys:treeselect id="preclassDutyList{{idx}}_learningResource" name="preclassDutyList[{{idx}}].learningResource.id" value="{{row.learningResource.id}}" 
+							labelName="preclassDutyList{{idx}}.learningResource.resourceName" labelValue="{{row.learningResource.resourceName}}"
+              				title="用户" url="/preview/reportForm/treeData?type=3" cssClass="form-control  required" notAllowSelectParent="true" checked="true"/>
+          			</td>
 					
 					<td>
 						<textarea id="preclassDutyList{{idx}}_learningTarget" name="preclassDutyList[{{idx}}].learningTarget" rows="4"    class="form-control required">{{row.learningTarget}}</textarea>
@@ -172,9 +173,6 @@
 						<input id="prepracticeDutyList{{idx}}_delFlag" name="prepracticeDutyList[{{idx}}].delFlag" type="hidden" value="0"/>
 					</td>
 					
-					<td>
-						<textarea id="prepracticeDutyList{{idx}}_practiceDuty" name="prepracticeDutyList[{{idx}}].practiceDuty" rows="4"    class="form-control required">{{row.practiceDuty}}</textarea>
-					</td>
 					
 					
 					<td>
