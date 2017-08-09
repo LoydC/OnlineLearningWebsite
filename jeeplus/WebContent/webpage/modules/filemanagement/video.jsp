@@ -35,37 +35,130 @@
 			  
 			<script src="http://vjs.zencdn.net/5.18.4/video.min.js"></script>	
 		  	<script type="text/javascript">
-				var myPlayer = videojs('my-Video',{ fluid: true}, function () {
-					console.log('Good to go!!');
-					console.log('${videoId}');
-           			//this.play(); 
-				});
-				myPlayer.on("play", function(){
-				    var myDate = new Date();
-				    //alert(myDate.toLocaleString() + "用户开始播放" + this.currentTime());
-				    console.log(myDate.toLocaleString() + "用户开始播放" + this.currentTime() + " 有效播放时间为：" + effective_playtime/3);
-				});
-				myPlayer.on("ended", function(){
-				    //console.log("end", this.currentTime());
-				    //var myDate = new Date();
-				    //alert(myDate.toLocaleString() + "用户已观看到结尾" + this.currentTime());
-				});
-				myPlayer.on("pause", function(){
-				    //console.log(parent.getActiveTabName().attr("data-id"));
-				    //console.log(parent.getActiveTabName()[0].innerText);
-				    //console.log(data_id);
-				    //console.log("pause");
-				    var myDate = new Date();
-				    //alert( myDate.toLocaleString() + "用户已暂停" + this.currentTime());
-				    console.log(myDate.toLocaleString() + "用户已暂停" + this.currentTime() + " 有效播放时间为：" + effective_playtime/3);
-				}); 
-				myPlayer.on("timeupdate", function(){
-				    console.log( "timeupdate  " + this.currentTime());
-				}); 
-				myPlayer.on("seeking", function(){
-				    console.log("用户移动进度条");
-				}); 
-			</script>
+		
+			cpalyinging="";//播放
+			cending="";//结束
+			ctimeupdate="";//进度条更新
+			cpauseing="";//暂停
+			JSONData = "";//前台JSON数据
+			var myPlayer = videojs('my-Video', {
+				fluid : true
+			}, function() {
+				console.log('Good to go!');
+				this.play();
+			});
+			videojs("my-Video").ready(function() {
+				var myPlayer = this;
+				myPlayer.play();
+				console.log("totaltimeffff"+myPlayer.duration());
+			});
+			myPlayer.on("play", function() {
+				var myDate = new Date();
+				cpalyinging += myDate.toLocaleString() +  "!"
+						+ this.currentTime()+";";
+				localStorage.setItem("cpalyinging", cpalyinging);
+				
+				//document.cookie = "cpalyinging = " + cpalyinging;
+				/* alert(myDate.toLocaleString() + "用户开始播放" + this.currentTime()); */
+			});
+			myPlayer.on("ended",
+					function() {
+						console.log("end", this.currentTime());
+						var myDate = new Date();
+						cending = myDate.toLocaleString() +"!"
+						+ this.currentTime()+";";
+						localStorage.setItem("cending", cending);
+				//document.cookie += "cending = " + cending ;
+						 /* alert(myDate.toLocaleString() + "用户已观看到结尾"
+								+ this.currentTime());  */
+					});
+			myPlayer.on("pause", function() {
+			var temp = parent.getActiveTabName();
+				console.log(parent.getActiveTabName().attr("data-id"));
+				console.log(parent.getActiveTabName()[0].innerText);
+				console.log(data_id);
+				console.log("pause");
+				var myDate = new Date();
+				cpauseing += myDate.toLocaleString() +  "!"
+						+ this.currentTime()+";";
+				localStorage.setItem("cpauseing", cpauseing);
+				//document.cookie += "cpauseing = " + cpauseing;
+				/* alert( myDate.toLocaleString() + "用户已暂停" + this.currentTime()); */
+			});
+			myPlayer.on("timeupdate",function(){
+			
+				ctimeupdate += this.currentTime()+",";
+				localStorage.setItem("ctimeupdate", ctimeupdate);
+				//document.cookie += "ctimeupdate = " + ctimeupdate;
+									
+			})
+			myPlayer.on("fullscreenchange", function() {
+				console.log("fullscreenchange");
+			});
+		
+			//start
+			
+			var courseId = "VB";
+			var totalTime = "";			
+			var videoId = "";
+			var playList = createVJSON(localStorage.getItem("cpalyinging"));			
+			var pauseList = createVJSON(localStorage.getItem("cpauseing"));
+			var timeupdate = localStorage.getItem("ctimeupdate");
+			console.log("totaltime"+myPlayer.duration());
+			
+			var JSONResult = createJSON();
+			console.log("JSONHHH"+JSONResult);//注释
+			$.ajax({
+					type : 'POST',
+					url: '${ctx}/video/data',
+					headers:{
+					},
+					data:JSONResult,
+
+					contentType : 'application/json;charset=utf-8',
+					dataType : 'json',
+					success : function(){
+						
+						alert("保存成功");
+					}
+				})
+			
+			/* passData为待构造成json的字符串，该函数用于构造pauseList和playListjson数组 */
+			function createVJSON(passData){
+				var tempListJSON = [];
+				var tempList = passData.split(";")
+            	for (var i = 0; i < tempList.length-1; i++) {
+	                var j = {};
+	                j.currentTime = tempList[i].split("!")[1];
+	                j.systemTime = tempList[i].split("!")[0];
+	                
+	                tempListJSON.push(j);
+            	}
+            	var ListData = JSON.stringify(tempListJSON);
+            	//alert("ListData"+ListData);
+            	return ListData;
+			}
+			/* 改函数用于构造传递给前台的参数 */
+			function createJSON(){
+				
+				var timeupdate = [];
+				var tempObj = {};
+				tempObj.courseId = courseId;
+				tempObj.totalTime = "";
+			/* 	tempObj.userId = ""; */
+				tempObj.videoId = "";
+				tempObj.playList = createVJSON(localStorage.getItem("cpalyinging"));			
+				tempObj.pauseList = createVJSON(localStorage.getItem("cpauseing"));
+				timeupdate.push(localStorage.getItem("ctimeupdate"));
+				tempObj.timeupdate = timeupdate;
+				
+				JSONData = JSON.stringify(tempObj) ;
+				alert("JSONData"+JSONData);
+				return JSONData;
+			}
+			//end
+						
+		</script>
 		</div>
 
 <script>

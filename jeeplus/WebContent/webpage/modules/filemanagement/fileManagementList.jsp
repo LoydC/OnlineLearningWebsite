@@ -158,14 +158,14 @@
 		        
 		        var url = '${ctx}/video/form?videoId=' + videoId;
 		        
-		        parent.openVideoResourceDialog("查看",url,"800px", "500px");
+		        parent.openVideoResourceDialog("查看视频",url,"400px", "560px");
 		        
-		         /* if(fileExtension == 'mp4'){
+		          /* if(fileExtension == 'mp4'){
 		        	var url = '${ctx}/video?videoId=' + videoId;
 			        url = encodeURI(encodeURI(url));		        
 			        //parent.parentMenuItem(url,"视频播放");
 			        parent.openTab(url,"视频播放",false);
-		        }  */
+		        }   */
 
       		})  
 			//
